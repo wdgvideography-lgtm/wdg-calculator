@@ -15,44 +15,63 @@
     --border: rgba(232,160,32,0.18);
     --text: #e8e8e8;
     --muted: #888;
-    --green: #3a7a5a;
     --red: #c0392b;
+    --red-soft: rgba(192,57,43,0.12);
+    --green: #27ae60;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--darker); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
 
   /* HEADER */
-  header { background: var(--dark); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  header { background: var(--dark); border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; gap: 12px; flex-wrap: wrap; }
   .logo { display: flex; flex-direction: column; }
   .logo-main { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
   .logo-sub { font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
   .header-total { text-align: right; }
   .header-total-label { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
   .header-total-val { font-size: 1.4rem; font-weight: 700; color: var(--gold); }
+  .btn-edit-mode { padding: 8px 14px; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; border-radius: 6px; cursor: pointer; transition: all 0.2s; border: 1px solid var(--border); background: transparent; color: var(--muted); white-space: nowrap; }
+  .btn-edit-mode.active { background: var(--gold); color: #111; border-color: var(--gold); }
 
   /* TABS */
-  .tabs { display: flex; background: var(--dark); border-bottom: 1px solid var(--border); overflow-x: auto; }
-  .tab { flex: 1; padding: 14px 12px; text-align: center; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; min-width: 100px; }
+  .tabs-wrapper { background: var(--dark); border-bottom: 1px solid var(--border); display: flex; align-items: center; }
+  .tabs { display: flex; overflow-x: auto; flex: 1; }
+  .tab { padding: 14px 14px; text-align: center; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
   .tab:hover { color: var(--text); }
   .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab-del { display: none; width: 16px; height: 16px; background: var(--red); border-radius: 50%; font-size: 0.65rem; align-items: center; justify-content: center; color: #fff; cursor: pointer; flex-shrink: 0; line-height: 1; }
+  .edit-mode .tab-del { display: flex; }
+  .btn-add-tab { display: none; padding: 8px 14px; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: var(--gold); background: transparent; border: none; cursor: pointer; white-space: nowrap; border-left: 1px solid var(--border); flex-shrink: 0; }
+  .edit-mode .btn-add-tab { display: block; }
 
   /* MAIN */
   main { max-width: 900px; margin: 0 auto; padding: 24px 16px 120px; }
 
+  /* PRICE MODE */
+  .price-toggle { display: flex; gap: 8px; margin-bottom: 20px; }
+  .price-toggle button { flex: 1; padding: 8px; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+  .price-toggle button.active { background: var(--gold); color: #111; border-color: var(--gold); }
+
   /* CATEGORY SECTIONS */
-  .cat-section { margin-bottom: 20px; }
+  .cat-section { margin-bottom: 16px; }
   .cat-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 8px 8px 0 0; cursor: pointer; user-select: none; }
-  .cat-icon { font-size: 1.1rem; }
+  .cat-header.collapsed { border-radius: 8px; }
+  .cat-icon { font-size: 1.1rem; flex-shrink: 0; }
   .cat-name { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); flex: 1; }
-  .cat-chevron { font-size: 0.8rem; color: var(--muted); transition: transform 0.2s; }
-  .cat-header.open .cat-chevron { transform: rotate(180deg); }
-  .cat-body { display: none; border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; }
-  .cat-body.open { display: block; }
+  .cat-name-input { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); background: transparent; border: 1px dashed rgba(232,160,32,0.4); border-radius: 4px; padding: 2px 6px; flex: 1; min-width: 0; }
+  .cat-name-input:focus { outline: none; border-color: var(--gold); }
+  .cat-chevron { font-size: 0.8rem; color: var(--muted); transition: transform 0.2s; flex-shrink: 0; }
+  .cat-header:not(.collapsed) .cat-chevron { transform: rotate(180deg); }
+  .cat-body { border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; }
+  .cat-body.hidden { display: none; }
+  .cat-edit-btns { display: none; gap: 6px; flex-shrink: 0; }
+  .edit-mode .cat-edit-btns { display: flex; }
 
   /* ITEMS */
-  .item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+  .item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
   .item:last-child { border-bottom: none; }
-  .item:hover { background: rgba(255,255,255,0.03); }
+  .item:hover { background: rgba(255,255,255,0.025); }
   .item-check { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
   .item-check.checked { background: var(--gold); border-color: var(--gold); }
   .item-check.checked::after { content: '✓'; font-size: 0.75rem; color: #111; font-weight: 700; }
@@ -60,15 +79,44 @@
   .item-name { font-size: 0.82rem; font-weight: 500; color: var(--text); }
   .item-note { font-size: 0.65rem; color: var(--muted); margin-top: 2px; line-height: 1.4; }
   .item-unit { font-size: 0.6rem; color: var(--muted); background: rgba(255,255,255,0.06); padding: 2px 7px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; }
-  .item-price { text-align: right; flex-shrink: 0; }
-  .item-price-range { font-size: 0.8rem; font-weight: 600; color: var(--gold); white-space: nowrap; }
-  .item-qty { width: 50px; text-align: center; background: var(--card2); border: 1px solid var(--border); color: var(--text); font-size: 0.8rem; padding: 4px 6px; border-radius: 5px; }
+  .item-price-display { text-align: right; flex-shrink: 0; font-size: 0.8rem; font-weight: 600; color: var(--gold); white-space: nowrap; }
+  .item-qty { width: 48px; text-align: center; background: var(--card2); border: 1px solid var(--border); color: var(--text); font-size: 0.8rem; padding: 4px 6px; border-radius: 5px; flex-shrink: 0; }
   .item-qty:focus { outline: none; border-color: var(--gold); }
 
-  /* PRICE MODE */
-  .price-toggle { display: flex; gap: 8px; margin-bottom: 20px; }
-  .price-toggle button { flex: 1; padding: 8px; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
-  .price-toggle button.active { background: var(--gold); color: #111; border-color: var(--gold); }
+  /* EDIT MODE ITEM FIELDS */
+  .item-edit-fields { display: none; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+  .edit-mode .item-check { display: none; }
+  .edit-mode .item-qty { display: none !important; }
+  .edit-mode .item-unit { display: none; }
+  .edit-mode .item-price-display { display: none; }
+  .edit-mode .item-info { display: none; }
+  .edit-mode .item-edit-fields { display: flex; }
+  .edit-field-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ef { background: var(--card2); border: 1px solid var(--border); color: var(--text); padding: 6px 10px; border-radius: 5px; font-size: 0.78rem; }
+  .ef:focus { outline: none; border-color: var(--gold); }
+  .ef-name { flex: 2; min-width: 140px; }
+  .ef-unit { flex: 1; min-width: 90px; }
+  .ef-low { width: 80px; }
+  .ef-high { width: 80px; }
+  .ef-note { flex: 1; min-width: 180px; font-size: 0.72rem; color: var(--muted); }
+  .ef-label { font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+
+  /* EDIT BUTTONS */
+  .btn-sm { padding: 5px 10px; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; border-radius: 5px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .btn-danger { background: var(--red-soft); border: 1px solid rgba(192,57,43,0.3); color: #e87070; }
+  .btn-danger:hover { background: rgba(192,57,43,0.25); }
+  .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-gold { background: var(--gold); border: none; color: #111; }
+  .btn-gold:hover { background: var(--gold-light); }
+  .item-del-btn { display: none; flex-shrink: 0; }
+  .edit-mode .item-del-btn { display: flex; align-items: center; }
+
+  /* ADD SERVICE ROW */
+  .add-service-row { display: none; padding: 10px 14px; border-top: 1px dashed rgba(232,160,32,0.2); background: rgba(232,160,32,0.03); }
+  .edit-mode .add-service-row { display: block; }
+  .add-cat-row { display: none; margin-top: 12px; }
+  .edit-mode .add-cat-row { display: flex; gap: 8px; align-items: center; }
 
   /* QUOTE PANEL */
   .quote-panel { position: fixed; bottom: 0; left: 0; right: 0; background: var(--dark); border-top: 1px solid var(--border); padding: 12px 20px; z-index: 200; }
@@ -95,7 +143,7 @@
   .quote-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
   .quote-table th { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border); }
   .quote-table td { padding: 8px 8px; font-size: 0.78rem; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
-  .quote-table .td-price { text-align: right; color: var(--gold); font-weight: 600; white-space: nowrap; }
+  .td-price { text-align: right; color: var(--gold); font-weight: 600; white-space: nowrap; }
   .quote-totals { background: var(--card2); border-radius: 8px; padding: 14px 16px; margin-bottom: 20px; }
   .quote-totals-row { display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px; }
   .quote-totals-row:last-child { margin-bottom: 0; font-weight: 700; font-size: 0.9rem; color: var(--gold); padding-top: 8px; border-top: 1px solid var(--border); margin-top: 6px; }
@@ -105,53 +153,62 @@
   .btn-copy { background: transparent; border: 1px solid var(--border); color: var(--text); }
   .btn-copy:hover { border-color: var(--gold); color: var(--gold); }
   .btn-close-modal { background: var(--gold); border: none; color: #111; }
-  .btn-close-modal:hover { background: var(--gold-light); }
 
-  /* EMPTY STATE */
-  .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
-  .empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
-  .empty p { font-size: 0.8rem; }
+  /* GENERIC MODAL */
+  .gmodal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1100; align-items: center; justify-content: center; padding: 20px; }
+  .gmodal-overlay.open { display: flex; }
+  .gmodal { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; width: 100%; max-width: 440px; }
+  .gmodal h3 { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+  .gmodal label { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 5px; }
+  .gmodal input, .gmodal select { width: 100%; background: var(--card2); border: 1px solid var(--border); color: var(--text); padding: 9px 12px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 14px; }
+  .gmodal input:focus, .gmodal select:focus { outline: none; border-color: var(--gold); }
+  .gmodal-row { display: flex; gap: 8px; }
+  .gmodal-row input { margin-bottom: 0; }
+  .gmodal-actions { display: flex; gap: 8px; margin-top: 4px; }
+  .gmodal-actions button { flex: 1; padding: 10px; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; border-radius: 6px; cursor: pointer; }
 
-  /* HIGHLIGHT SELECTED */
   .item.selected { background: rgba(232,160,32,0.05); }
+  .edit-banner { display: none; background: rgba(232,160,32,0.08); border-bottom: 1px solid rgba(232,160,32,0.2); padding: 8px 20px; text-align: center; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); }
+  .edit-mode-on .edit-banner { display: block; }
 
-  @media (max-width: 500px) {
-    .item-note { display: none; }
-    .item-unit { display: none; }
+  @media (max-width: 520px) {
+    .ef-note { display: none; }
     .quote-panel-inner { flex-wrap: wrap; }
     .btn-quote { width: 100%; text-align: center; }
+    .ef-low, .ef-high { width: 68px; }
   }
 </style>
 </head>
 <body>
+
+<div class="edit-banner">✏️ Edit Mode — changes save automatically</div>
 
 <header>
   <div class="logo">
     <span class="logo-main">WDG</span>
     <span class="logo-sub">Pricing Calculator</span>
   </div>
-  <div class="header-total">
-    <div class="header-total-label">Quote Total</div>
-    <div class="header-total-val" id="headerTotal">£0</div>
+  <div class="header-right">
+    <div class="header-total">
+      <div class="header-total-label">Quote Total</div>
+      <div class="header-total-val" id="headerTotal">£0</div>
+    </div>
+    <button class="btn-edit-mode" id="editToggle" onclick="toggleEditMode()">✏️ Edit</button>
   </div>
 </header>
 
-<div class="tabs">
-  <div class="tab active" onclick="switchTab('production')">🎥 Production</div>
-  <div class="tab" onclick="switchTab('web')">🖥️ Web Design</div>
-  <div class="tab" onclick="switchTab('marketing')">📱 Marketing</div>
+<div class="tabs-wrapper">
+  <div class="tabs" id="tabsBar"></div>
+  <button class="btn-add-tab" onclick="openAddTab()">+ New Tab</button>
 </div>
 
-<main>
+<main id="mainContent">
   <div class="price-toggle">
     <button class="active" onclick="setPriceMode('low')">Low Estimate</button>
     <button onclick="setPriceMode('mid')">Mid Estimate</button>
     <button onclick="setPriceMode('high')">High Estimate</button>
   </div>
-
-  <div id="tab-production"></div>
-  <div id="tab-web" style="display:none"></div>
-  <div id="tab-marketing" style="display:none"></div>
+  <div id="tabContents"></div>
 </main>
 
 <div class="quote-panel">
@@ -166,7 +223,7 @@
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- QUOTE MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
   <div class="modal">
     <div class="modal-title">📋 Quote Summary</div>
@@ -176,306 +233,598 @@
       <input type="text" id="clientNotes" placeholder="Notes / project brief (optional)"/>
     </div>
     <div id="modalContent"></div>
-    <div class="modal-note">
-      All prices shown are indicative estimates based on WDG standard rates. Final quote subject to scope confirmation. Prices exclude VAT unless otherwise agreed.
-    </div>
+    <div class="modal-note">All prices shown are indicative estimates based on WDG standard rates. Final quote subject to scope confirmation. Prices exclude VAT unless otherwise agreed.</div>
     <div class="modal-actions">
       <button class="btn-copy" onclick="copyQuote()">📋 Copy to Clipboard</button>
-      <button class="btn-close-modal" onclick="closeModal()">Close</button>
+      <button class="btn-close-modal btn-gold" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD TAB MODAL -->
+<div class="gmodal-overlay" id="addTabModal">
+  <div class="gmodal">
+    <h3>➕ New Tab</h3>
+    <label>Tab Name</label>
+    <input type="text" id="newTabName" placeholder="e.g. Photography"/>
+    <label>Emoji Icon</label>
+    <input type="text" id="newTabIcon" placeholder="e.g. 📸" maxlength="4"/>
+    <div class="gmodal-actions">
+      <button class="btn-sm btn-ghost" onclick="closeAddTab()">Cancel</button>
+      <button class="btn-sm btn-gold" onclick="confirmAddTab()">Add Tab</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD CATEGORY MODAL -->
+<div class="gmodal-overlay" id="addCatModal">
+  <div class="gmodal">
+    <h3>➕ New Section</h3>
+    <label>Section Name</label>
+    <input type="text" id="newCatName" placeholder="e.g. Retainer Packages"/>
+    <label>Emoji Icon</label>
+    <input type="text" id="newCatIcon" placeholder="e.g. 📦" maxlength="4"/>
+    <div class="gmodal-actions">
+      <button class="btn-sm btn-ghost" onclick="closeAddCat()">Cancel</button>
+      <button class="btn-sm btn-gold" onclick="confirmAddCat()">Add Section</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD SERVICE MODAL -->
+<div class="gmodal-overlay" id="addServiceModal">
+  <div class="gmodal">
+    <h3>➕ New Service</h3>
+    <label>Service Name</label>
+    <input type="text" id="newSvcName" placeholder="e.g. Brand Photography"/>
+    <label>Unit</label>
+    <input type="text" id="newSvcUnit" placeholder="e.g. Per session, Fixed, Per month"/>
+    <label>Price Range (£)</label>
+    <div class="gmodal-row" style="margin-bottom:14px">
+      <input type="number" id="newSvcLow" placeholder="Low e.g. 200"/>
+      <input type="number" id="newSvcHigh" placeholder="High e.g. 400"/>
+    </div>
+    <label>Notes / Description</label>
+    <input type="text" id="newSvcNote" placeholder="Brief description (optional)"/>
+    <div class="gmodal-actions">
+      <button class="btn-sm btn-ghost" onclick="closeAddService()">Cancel</button>
+      <button class="btn-sm btn-gold" onclick="confirmAddService()">Add Service</button>
     </div>
   </div>
 </div>
 
 <script>
-// ─── DATA ───────────────────────────────────────────────────────────────────
-
-const DATA = {
-  production: [
-    { cat: '🎥 Production – Shoot Day', items: [
-      { name: 'Half-Day Shoot (up to 4 hours)', unit: 'Per session', low: 350, high: 550, note: 'Single location, basic setup, 1–2 cameras' },
-      { name: 'Full-Day Shoot (up to 8 hours)', unit: 'Per session', low: 600, high: 950, note: 'Multiple locations, lighting/audio included' },
-      { name: 'Multi-Day Shoot', unit: 'Per day', low: 550, high: 850, note: 'Discounted rate for 2+ consecutive days' },
-      { name: 'Additional Camera Operator', unit: 'Per day', low: 200, high: 300, note: 'Second angle, B-roll, multi-cam coverage' },
-      { name: 'Drone Footage (licensed operator)', unit: 'Per session', low: 200, high: 350, note: 'Aerial shots, planning + flight time' },
-    ]},
-    { cat: '✂️ Editing & Post-Production', items: [
-      { name: 'Short Social Video (15s – 60s)', unit: 'Per video', low: 120, high: 220, note: 'TikTok, Reels, Shorts – fast edit, captions, music' },
-      { name: 'Standard Promotional Video (1 – 3 mins)', unit: 'Per video', low: 250, high: 450, note: 'Branded, colour grade, audio mix, text overlays' },
-      { name: 'Corporate / Service Video (3 – 8 mins)', unit: 'Per video', low: 450, high: 700, note: 'Full story, multiple clips, voiceover sync' },
-      { name: 'Long-Form Video (8+ mins)', unit: 'Per video', low: 600, high: 900, note: 'Documentary style, interviews, detailed sections' },
-      { name: 'YouTube Video Edit', unit: 'Per video', low: 200, high: 350, note: 'Optimised structure, thumbnails, end screens' },
-      { name: 'Drone Footage Editing', unit: 'Per project', low: 100, high: 200, note: 'Stabilisation, colour grading, music' },
-      { name: 'Animated Graphics / Motion Titles', unit: 'Per set', low: 100, high: 250, note: 'Intro/outro, icons, animated text, transitions' },
-      { name: 'Colour Grading & Audio Enhancement', unit: 'Per video', low: 80, high: 150, note: 'Professional finish, noise reduction, balance' },
-      { name: 'Subtitles / Closed Captions', unit: 'Per video', low: 50, high: 100, note: 'Burned-in text or separate SRT file' },
-      { name: 'Extra Revision Round', unit: 'Per round', low: 60, high: 100, note: 'Beyond 2 included rounds' },
-    ]},
-    { cat: '📦 Content Packs / Bulk', items: [
-      { name: '5× Short Social Videos', unit: 'Pack', low: 500, high: 850, note: 'Filmed + edited, delivered within 1 week' },
-      { name: '3× Standard Promos', unit: 'Pack', low: 700, high: 1200, note: 'Consistent branding across all videos' },
-      { name: '1× Long-Form + 3× Shorts', unit: 'Pack', low: 750, high: 1100, note: 'One shoot, cut down for all platforms' },
-      { name: 'Monthly Retainer – Content', unit: 'Per month', low: 800, high: 1500, note: '1 shoot day + 4–6 videos delivered + edits' },
-    ]},
-    { cat: '🎙️ Add-Ons', items: [
-      { name: 'Professional Voiceover', unit: 'Per video', low: 80, high: 180, note: 'Male/female, professional voice talent' },
-      { name: 'Licensed Music / Soundtrack', unit: 'Per video', low: 30, high: 80, note: 'Royalty-free or premium licensing' },
-      { name: 'Storyboarding & Concept Design', unit: 'Per project', low: 100, high: 200, note: 'Plan shots, script, flow before filming' },
-      { name: 'Scriptwriting', unit: 'Per video', low: 60, high: 120, note: 'Professional copy tailored to audience' },
-      { name: 'File Delivery – All Formats', unit: 'Per project', low: 40, high: 80, note: 'MP4, MOV, optimised for each platform' },
-    ]},
+// ─── DEFAULT DATA ────────────────────────────────────────────────────────────
+const DEFAULT_DATA = {
+  tabs: [
+    { id: 'production', label: 'Production', icon: '🎥' },
+    { id: 'web', label: 'Web Design', icon: '🖥️' },
+    { id: 'marketing', label: 'Marketing', icon: '📱' },
   ],
-  web: [
-    { cat: '🎨 Design Services', items: [
-      { name: 'Custom Homepage Design', unit: 'Fixed', low: 400, high: 700, note: 'Unique layout, branded styling, mobile-first' },
-      { name: 'Internal Page Design', unit: 'Per page', low: 120, high: 200, note: 'About, Services, Contact, etc.' },
-      { name: 'Mobile / Tablet Responsive Adaptation', unit: 'Fixed', low: 250, high: 450, note: 'Full optimisation across all screen sizes' },
-      { name: 'Branded Colour & Font Styling', unit: 'Fixed', low: 100, high: 200, note: 'Apply brand guidelines consistently' },
-      { name: 'Custom Icon / Graphic Creation', unit: 'Set', low: 150, high: 300, note: 'Custom icons, banners, or graphics' },
-      { name: 'Wireframes / Layout Planning', unit: 'Fixed', low: 200, high: 350, note: 'Plan structure before building' },
-      { name: 'Extra Revision Round', unit: 'Per round', low: 80, high: 120, note: 'Beyond included rounds' },
-      { name: 'Accessibility Compliant Design', unit: 'Fixed', low: 200, high: 350, note: 'WCAG 2.1 compliant' },
-    ]},
-    { cat: '🛠️ Development & Build', items: [
-      { name: 'Base CMS Setup & Configuration', unit: 'Fixed', low: 180, high: 300, note: 'WordPress, Webflow, etc. install + setup' },
-      { name: 'Standard Page Build', unit: 'Per page', low: 150, high: 250, note: 'Text, images, basic layout' },
-      { name: 'Complex Page Build', unit: 'Per page', low: 250, high: 400, note: 'Forms, filters, dynamic content, animations' },
-      { name: 'Blog / News Section', unit: 'Fixed', low: 200, high: 350, note: 'Post management, categories, archive' },
-      { name: 'Gallery / Portfolio System', unit: 'Fixed', low: 150, high: 280, note: 'Filterable, lightbox, image optimisation' },
-      { name: 'Team / Staff Profiles Section', unit: 'Fixed', low: 120, high: 220, note: 'Profiles, bios, photos' },
-      { name: 'Testimonials / Reviews Module', unit: 'Fixed', low: 100, high: 180, note: 'Display + submission form' },
-      { name: 'Search Functionality Setup', unit: 'Fixed', low: 80, high: 150, note: 'Full-site search' },
-      { name: 'Multilingual Setup', unit: 'Per language', low: 200, high: 350, note: 'Language switcher + structure' },
-      { name: 'Custom Post Types / Fields', unit: 'Fixed', low: 180, high: 300, note: 'For custom content types' },
-      { name: '3rd-Party API Integration', unit: 'Fixed', low: 300, high: 600, note: 'Booking systems, transport data, etc.' },
-    ]},
-    { cat: '📝 Content Work', items: [
-      { name: 'Content Population', unit: 'Per page', low: 60, high: 100, note: 'Add supplied text & images' },
-      { name: 'Copywriting', unit: 'Per page', low: 80, high: 150, note: 'Professional written content' },
-      { name: 'SEO-Optimised Copy', unit: 'Per page', low: 120, high: 200, note: 'Keyword-focused, structured for search' },
-      { name: 'Stock Image Sourcing & Optimisation', unit: 'Fixed', low: 100, high: 200, note: 'Relevant, licensed, compressed images' },
-      { name: 'Image Editing / Resizing', unit: 'Per batch', low: 60, high: 120, note: 'Crop, optimise, format for web' },
-      { name: 'Embed Videos / Maps / Documents', unit: 'Fixed', low: 50, high: 100, note: 'YouTube, Google Maps, PDF embeds' },
-    ]},
-    { cat: '📞 Functionality & Features', items: [
-      { name: 'Contact Form + Anti-Spam', unit: 'Fixed', low: 80, high: 150, note: 'Basic fields, email delivery' },
-      { name: 'Quote / Enquiry Form', unit: 'Fixed', low: 120, high: 200, note: 'Multi-field, file upload, conditional logic' },
-      { name: 'Live Chat / Chatbot Integration', unit: 'Fixed', low: 150, high: 300, note: 'WhatsApp, Messenger, or automated bot' },
-      { name: 'Google Maps / Route Locator', unit: 'Fixed', low: 80, high: 150, note: 'Interactive map + directions' },
-      { name: 'Cookie Consent / GDPR Setup', unit: 'Fixed', low: 100, high: 180, note: 'Compliance banner + policy links' },
-      { name: 'Pop-Ups / Banners / CTAs', unit: 'Fixed', low: 80, high: 150, note: 'Announcements, offers, lead capture' },
-      { name: 'Social Media Feed Integration', unit: 'Fixed', low: 60, high: 120, note: 'Instagram, Facebook, LinkedIn feeds' },
-      { name: 'Booking / Appointment System', unit: 'Fixed', low: 250, high: 450, note: 'Calendar, availability, payments' },
-      { name: 'Customer Login / Member Area', unit: 'Fixed', low: 300, high: 550, note: 'Secure access, restricted content' },
-      { name: 'Service Animations (AMC specific)', unit: 'Fixed', low: 300, high: 500, note: 'Lorries driving, loading, tipping sequences' },
-      { name: 'Fleet Showcase Section', unit: 'Fixed', low: 150, high: 280, note: 'Dedicated section with images + descriptions' },
-    ]},
-    { cat: '🛒 Ecommerce Specific', items: [
-      { name: 'Shop Setup + Catalogue Framework', unit: 'Fixed', low: 300, high: 500, note: 'Base store structure' },
-      { name: 'Product Page Build', unit: 'Per type', low: 80, high: 140, note: 'Variable options, specs' },
-      { name: 'Basic Product Upload', unit: 'Per product', low: 10, high: 20, note: 'Add title, price, image, description' },
-      { name: 'Payment Gateway Setup', unit: 'Fixed', low: 120, high: 200, note: 'Stripe, PayPal, etc.' },
-      { name: 'Shipping / Delivery Rules Setup', unit: 'Fixed', low: 150, high: 280, note: 'Zones, rates, weight-based' },
-      { name: 'Discount / Coupon System', unit: 'Fixed', low: 100, high: 180, note: 'Codes, percentages, limits' },
-      { name: 'Inventory Tracking Setup', unit: 'Fixed', low: 120, high: 200, note: 'Stock management + alerts' },
-    ]},
-    { cat: '🔍 SEO & Performance', items: [
-      { name: 'Basic SEO Setup', unit: 'Fixed', low: 250, high: 400, note: 'Titles, meta descriptions, clean URLs' },
-      { name: 'On-Page Optimisation', unit: 'Per page', low: 50, high: 80, note: 'Headings, keywords, internal links' },
-      { name: 'XML Sitemap + Search Console Setup', unit: 'Fixed', low: 80, high: 140, note: 'Submit to Google' },
-      { name: 'Google Analytics / Tag Manager', unit: 'Fixed', low: 80, high: 150, note: 'Traffic tracking + reporting' },
-      { name: 'Local SEO Setup', unit: 'Fixed', low: 150, high: 280, note: 'Google Business Profile integration' },
-      { name: 'Site Speed Optimisation', unit: 'Fixed', low: 200, high: 350, note: 'Caching, compression, script minify' },
-      { name: 'Schema Markup', unit: 'Fixed', low: 120, high: 200, note: 'Service, transport, local business structured data' },
-    ]},
-    { cat: '🔒 Security & Ongoing', items: [
-      { name: 'SSL Certificate Install + Config', unit: 'Fixed', low: 60, high: 120, note: 'Secure HTTPS setup' },
-      { name: 'Monthly Website Maintenance', unit: 'Per month', low: 80, high: 180, note: 'Updates, backups, monitoring' },
-      { name: 'Domain + Hosting Management', unit: 'Per year', low: 100, high: 200, note: 'Renewal, DNS, email config' },
-    ]},
-    { cat: '📧 Email & Domain Management', items: [
-      { name: 'Email Management', unit: 'Per person/month', low: 5, high: 5, note: 'Managed business email per user — setup, hosting, support. Set quantity = number of people.' },
-      { name: 'Domain Management', unit: 'Per person/month', low: 10, high: 10, note: 'Domain registration, renewal, DNS management per user. Set quantity = number of people.' },
-    ]},
-  ],
-  marketing: [
-    { cat: '🎯 Strategy & Planning', items: [
-      { name: 'Marketing Strategy Document', unit: 'Fixed', low: 400, high: 700, note: 'Audience, goals, channels, 12-month roadmap' },
-      { name: 'Competitor Analysis Report', unit: 'Fixed', low: 250, high: 450, note: 'Full breakdown of competitors activity + gaps' },
-      { name: 'Brand Guidelines Update', unit: 'Fixed', low: 150, high: 300, note: 'Ensure consistency across all channels' },
-      { name: 'Monthly Marketing Strategy Meeting', unit: 'Per session', low: 100, high: 180, note: '60–90 mins – review results + plan next month' },
-      { name: 'Quarterly Strategy Review', unit: 'Per session', low: 250, high: 400, note: 'Deep dive, adjust direction, set new targets' },
-    ]},
-    { cat: '📱 Platform Management – Single', items: [
-      { name: 'YouTube Channel Management', unit: 'Per month', low: 300, high: 550, note: 'Uploads, SEO titles/tags, thumbnails, analytics' },
-      { name: 'Instagram Management', unit: 'Per month', low: 250, high: 450, note: 'Posts, Reels, Stories, engagement, hashtags' },
-      { name: 'Facebook Management', unit: 'Per month', low: 220, high: 400, note: 'Page posts, community management, reviews, events' },
-      { name: 'LinkedIn Management', unit: 'Per month', low: 280, high: 500, note: 'Professional content, outreach, company page growth' },
-      { name: 'TikTok Management', unit: 'Per month', low: 250, high: 450, note: 'Trend-based content, hashtags, engagement' },
-      { name: 'X (Twitter) Management', unit: 'Per month', low: 180, high: 320, note: 'Regular updates, industry news, engagement' },
-      { name: 'Google Business Profile Management', unit: 'Per month', low: 150, high: 280, note: 'Posts, reviews, updates, local optimisation' },
-    ]},
-    { cat: '📱 Platform Management – Multi', items: [
-      { name: 'Dual Platform Management', unit: 'Per month', low: 450, high: 750, note: 'Any 2 channels from list above' },
-      { name: '3–4 Platform Management', unit: 'Per month', low: 700, high: 1100, note: 'Full cross-platform consistency & scheduling' },
-      { name: '5+ Platform Full Social Management', unit: 'Per month', low: 950, high: 1500, note: 'Every major channel + Google Business Profile' },
-    ]},
-    { cat: '📺 Video Included Packages', items: [
-      { name: 'YouTube Management + 1 Video / Month', unit: 'Per month', low: 650, high: 950, note: 'Includes: shoot, edit, upload, SEO, thumbnails' },
-      { name: 'Multi-Platform + 2 Videos / Month', unit: 'Per month', low: 900, high: 1400, note: '1 shoot day, edited into multiple formats' },
-      { name: 'Premium – Full Content Engine', unit: 'Per month', low: 1300, high: 1900, note: '1 full shoot day → 6–8 videos cut for all platforms + optimisation' },
-    ]},
-    { cat: '🌐 Website Management Add-On', items: [
-      { name: 'Standard Website Maintenance', unit: 'Per month', low: 150, high: 280, note: 'Updates, backups, security, small edits' },
-      { name: 'Website + Content Updates', unit: 'Per month', low: 250, high: 400, note: 'Regular text/image changes, new service pages' },
-      { name: 'Website + SEO Management', unit: 'Per month', low: 300, high: 500, note: 'On-page tweaks, keyword tracking, speed checks' },
-      { name: 'Full Web + Marketing Combo', unit: 'Per month', low: 450, high: 700, note: 'All website care + social posting + basic SEO' },
-    ]},
-    { cat: '🔍 SEO & Growth', items: [
-      { name: 'Local SEO Management', unit: 'Per month', low: 200, high: 350, note: 'Map rankings, local keywords, citations' },
-      { name: 'Full SEO Management', unit: 'Per month', low: 350, high: 600, note: 'Technical, on-page, off-page, monthly reports' },
-      { name: 'Review Management', unit: 'Per month', low: 120, high: 220, note: 'Request + respond to reviews across all platforms' },
-      { name: 'Email Marketing Management', unit: 'Per month', low: 180, high: 320, note: 'Newsletters, automation, list growth' },
-      { name: 'Paid Ads Management (Google / Meta)', unit: '% of spend / flat', low: 300, high: 600, note: '20% of spend OR flat fee – campaign setup, optimisation, reporting' },
-    ]},
-    { cat: '🚀 Complete Full-Service Management', items: [
-      { name: 'Level 1 – Starter', unit: 'Per month', low: 950, high: 1300, note: '2 social platforms, 1 short video/month, website maintenance, monthly meeting + report' },
-      { name: 'Level 2 – Growth', unit: 'Per month', low: 1400, high: 1900, note: '4 social platforms, 1 shoot day → 3–4 videos, website + SEO, monthly meeting + report' },
-      { name: 'Level 3 – Premium / Agency Level', unit: 'Per month', low: 2000, high: 2800, note: 'All major platforms, dedicated video session, full website management, SEO, email marketing, monthly strategy meeting + report' },
-    ]},
-    { cat: '📊 Reporting & Analysis', items: [
-      { name: 'Monthly Performance Report', unit: 'Per month', low: 80, high: 150, note: 'Growth, engagement, conversions, recommendations' },
-      { name: 'Quarterly Deep-Dive Report', unit: 'Per quarter', low: 200, high: 350, note: 'Trends, ROI, strategy adjustment' },
-      { name: 'Custom Analytics Dashboard Setup', unit: 'Fixed', low: 150, high: 250, note: 'Live view of all key metrics' },
-    ]},
-  ],
+  cats: {
+    production: [
+      { id: 'prod_shoot', name: 'Production – Shoot Day', icon: '🎥', items: [
+        { id: 'p0', name: 'Half-Day Shoot (up to 4 hours)', unit: 'Per session', low: 350, high: 550, note: 'Single location, basic setup, 1–2 cameras' },
+        { id: 'p1', name: 'Full-Day Shoot (up to 8 hours)', unit: 'Per session', low: 600, high: 950, note: 'Multiple locations, lighting/audio included' },
+        { id: 'p2', name: 'Multi-Day Shoot', unit: 'Per day', low: 550, high: 850, note: 'Discounted rate for 2+ consecutive days' },
+        { id: 'p3', name: 'Additional Camera Operator', unit: 'Per day', low: 200, high: 300, note: 'Second angle, B-roll, multi-cam coverage' },
+        { id: 'p4', name: 'Drone Footage (licensed operator)', unit: 'Per session', low: 200, high: 350, note: 'Aerial shots, planning + flight time' },
+      ]},
+      { id: 'prod_edit', name: 'Editing & Post-Production', icon: '✂️', items: [
+        { id: 'e0', name: 'Short Social Video (15s – 60s)', unit: 'Per video', low: 120, high: 220, note: 'TikTok, Reels, Shorts – fast edit, captions, music' },
+        { id: 'e1', name: 'Standard Promotional Video (1–3 mins)', unit: 'Per video', low: 250, high: 450, note: 'Branded, colour grade, audio mix, text overlays' },
+        { id: 'e2', name: 'Corporate / Service Video (3–8 mins)', unit: 'Per video', low: 450, high: 700, note: 'Full story, multiple clips, voiceover sync' },
+        { id: 'e3', name: 'Long-Form Video (8+ mins)', unit: 'Per video', low: 600, high: 900, note: 'Documentary style, interviews, detailed sections' },
+        { id: 'e4', name: 'YouTube Video Edit', unit: 'Per video', low: 200, high: 350, note: 'Optimised structure, thumbnails, end screens' },
+        { id: 'e5', name: 'Drone Footage Editing', unit: 'Per project', low: 100, high: 200, note: 'Stabilisation, colour grading, music' },
+        { id: 'e6', name: 'Animated Graphics / Motion Titles', unit: 'Per set', low: 100, high: 250, note: 'Intro/outro, icons, animated text, transitions' },
+        { id: 'e7', name: 'Colour Grading & Audio Enhancement', unit: 'Per video', low: 80, high: 150, note: 'Professional finish, noise reduction, balance' },
+        { id: 'e8', name: 'Subtitles / Closed Captions', unit: 'Per video', low: 50, high: 100, note: 'Burned-in text or separate SRT file' },
+        { id: 'e9', name: 'Extra Revision Round', unit: 'Per round', low: 60, high: 100, note: 'Beyond 2 included rounds' },
+      ]},
+      { id: 'prod_packs', name: 'Content Packs / Bulk', icon: '📦', items: [
+        { id: 'k0', name: '5× Short Social Videos', unit: 'Pack', low: 500, high: 850, note: 'Filmed + edited, delivered within 1 week' },
+        { id: 'k1', name: '3× Standard Promos', unit: 'Pack', low: 700, high: 1200, note: 'Consistent branding across all videos' },
+        { id: 'k2', name: '1× Long-Form + 3× Shorts', unit: 'Pack', low: 750, high: 1100, note: 'One shoot, cut down for all platforms' },
+        { id: 'k3', name: 'Monthly Retainer – Content', unit: 'Per month', low: 800, high: 1500, note: '1 shoot day + 4–6 videos delivered + edits' },
+      ]},
+      { id: 'prod_addons', name: 'Add-Ons', icon: '🎙️', items: [
+        { id: 'a0', name: 'Professional Voiceover', unit: 'Per video', low: 80, high: 180, note: 'Male/female, professional voice talent' },
+        { id: 'a1', name: 'Licensed Music / Soundtrack', unit: 'Per video', low: 30, high: 80, note: 'Royalty-free or premium licensing' },
+        { id: 'a2', name: 'Storyboarding & Concept Design', unit: 'Per project', low: 100, high: 200, note: 'Plan shots, script, flow before filming' },
+        { id: 'a3', name: 'Scriptwriting', unit: 'Per video', low: 60, high: 120, note: 'Professional copy tailored to audience' },
+        { id: 'a4', name: 'File Delivery – All Formats', unit: 'Per project', low: 40, high: 80, note: 'MP4, MOV, optimised for each platform' },
+      ]},
+    ],
+    web: [
+      { id: 'w_design', name: 'Design Services', icon: '🎨', items: [
+        { id: 'wd0', name: 'Custom Homepage Design', unit: 'Fixed', low: 400, high: 700, note: 'Unique layout, branded styling, mobile-first' },
+        { id: 'wd1', name: 'Internal Page Design', unit: 'Per page', low: 120, high: 200, note: 'About, Services, Contact, etc.' },
+        { id: 'wd2', name: 'Mobile / Tablet Responsive Adaptation', unit: 'Fixed', low: 250, high: 450, note: 'Full optimisation across all screen sizes' },
+        { id: 'wd3', name: 'Branded Colour & Font Styling', unit: 'Fixed', low: 100, high: 200, note: 'Apply brand guidelines consistently' },
+        { id: 'wd4', name: 'Custom Icon / Graphic Creation', unit: 'Set', low: 150, high: 300, note: 'Custom icons, banners, or graphics' },
+        { id: 'wd5', name: 'Wireframes / Layout Planning', unit: 'Fixed', low: 200, high: 350, note: 'Plan structure before building' },
+        { id: 'wd6', name: 'Extra Revision Round', unit: 'Per round', low: 80, high: 120, note: 'Beyond included rounds' },
+        { id: 'wd7', name: 'Accessibility Compliant Design', unit: 'Fixed', low: 200, high: 350, note: 'WCAG 2.1 compliant' },
+      ]},
+      { id: 'w_dev', name: 'Development & Build', icon: '🛠️', items: [
+        { id: 'wv0', name: 'Base CMS Setup & Configuration', unit: 'Fixed', low: 180, high: 300, note: 'WordPress, Webflow, etc. install + setup' },
+        { id: 'wv1', name: 'Standard Page Build', unit: 'Per page', low: 150, high: 250, note: 'Text, images, basic layout' },
+        { id: 'wv2', name: 'Complex Page Build', unit: 'Per page', low: 250, high: 400, note: 'Forms, filters, dynamic content, animations' },
+        { id: 'wv3', name: 'Blog / News Section', unit: 'Fixed', low: 200, high: 350, note: 'Post management, categories, archive' },
+        { id: 'wv4', name: 'Gallery / Portfolio System', unit: 'Fixed', low: 150, high: 280, note: 'Filterable, lightbox, image optimisation' },
+        { id: 'wv5', name: 'Testimonials / Reviews Module', unit: 'Fixed', low: 100, high: 180, note: 'Display + submission form' },
+        { id: 'wv6', name: 'Booking / Appointment System', unit: 'Fixed', low: 250, high: 450, note: 'Calendar, availability, payments' },
+        { id: 'wv7', name: '3rd-Party API Integration', unit: 'Fixed', low: 300, high: 600, note: 'Booking systems, transport data, etc.' },
+        { id: 'wv8', name: 'Customer Login / Member Area', unit: 'Fixed', low: 300, high: 550, note: 'Secure access, restricted content' },
+      ]},
+      { id: 'w_content', name: 'Content Work', icon: '📝', items: [
+        { id: 'wc0', name: 'Content Population', unit: 'Per page', low: 60, high: 100, note: 'Add supplied text & images' },
+        { id: 'wc1', name: 'Copywriting', unit: 'Per page', low: 80, high: 150, note: 'Professional written content' },
+        { id: 'wc2', name: 'SEO-Optimised Copy', unit: 'Per page', low: 120, high: 200, note: 'Keyword-focused, structured for search' },
+        { id: 'wc3', name: 'Stock Image Sourcing & Optimisation', unit: 'Fixed', low: 100, high: 200, note: 'Relevant, licensed, compressed images' },
+      ]},
+      { id: 'w_func', name: 'Functionality & Features', icon: '📞', items: [
+        { id: 'wf0', name: 'Contact Form + Anti-Spam', unit: 'Fixed', low: 80, high: 150, note: 'Basic fields, email delivery' },
+        { id: 'wf1', name: 'Quote / Enquiry Form', unit: 'Fixed', low: 120, high: 200, note: 'Multi-field, file upload, conditional logic' },
+        { id: 'wf2', name: 'Live Chat / Chatbot Integration', unit: 'Fixed', low: 150, high: 300, note: 'WhatsApp, Messenger, or automated bot' },
+        { id: 'wf3', name: 'Google Maps / Route Locator', unit: 'Fixed', low: 80, high: 150, note: 'Interactive map + directions' },
+        { id: 'wf4', name: 'Cookie Consent / GDPR Setup', unit: 'Fixed', low: 100, high: 180, note: 'Compliance banner + policy links' },
+        { id: 'wf5', name: 'Social Media Feed Integration', unit: 'Fixed', low: 60, high: 120, note: 'Instagram, Facebook, LinkedIn feeds' },
+        { id: 'wf6', name: 'Service Animations (Transport specific)', unit: 'Fixed', low: 300, high: 500, note: 'Lorries driving, loading, tipping sequences' },
+        { id: 'wf7', name: 'Fleet Showcase Section', unit: 'Fixed', low: 150, high: 280, note: 'Dedicated section with images + descriptions' },
+      ]},
+      { id: 'w_seo', name: 'SEO & Performance', icon: '🔍', items: [
+        { id: 'ws0', name: 'Basic SEO Setup', unit: 'Fixed', low: 250, high: 400, note: 'Titles, meta descriptions, clean URLs' },
+        { id: 'ws1', name: 'On-Page Optimisation', unit: 'Per page', low: 50, high: 80, note: 'Headings, keywords, internal links' },
+        { id: 'ws2', name: 'XML Sitemap + Search Console', unit: 'Fixed', low: 80, high: 140, note: 'Submit to Google' },
+        { id: 'ws3', name: 'Google Analytics / Tag Manager', unit: 'Fixed', low: 80, high: 150, note: 'Traffic tracking + reporting' },
+        { id: 'ws4', name: 'Local SEO Setup', unit: 'Fixed', low: 150, high: 280, note: 'Google Business Profile integration' },
+        { id: 'ws5', name: 'Site Speed Optimisation', unit: 'Fixed', low: 200, high: 350, note: 'Caching, compression, script minify' },
+        { id: 'ws6', name: 'Schema Markup', unit: 'Fixed', low: 120, high: 200, note: 'Service, transport, local business structured data' },
+      ]},
+      { id: 'w_sec', name: 'Security & Ongoing', icon: '🔒', items: [
+        { id: 'wsc0', name: 'SSL Certificate Install + Config', unit: 'Fixed', low: 60, high: 120, note: 'Secure HTTPS setup' },
+        { id: 'wsc1', name: 'Monthly Website Maintenance', unit: 'Per month', low: 80, high: 180, note: 'Updates, backups, monitoring' },
+        { id: 'wsc2', name: 'Domain + Hosting Management', unit: 'Per year', low: 100, high: 200, note: 'Renewal, DNS, email config' },
+      ]},
+      { id: 'w_email', name: 'Email & Domain Management', icon: '📧', items: [
+        { id: 'wem0', name: 'Email Management', unit: 'Per person/month', low: 5, high: 5, note: 'Managed business email per user — setup, hosting, support. Set qty = number of people.' },
+        { id: 'wem1', name: 'Domain Management', unit: 'Per person/month', low: 10, high: 10, note: 'Domain registration, renewal, DNS management per user. Set qty = number of people.' },
+      ]},
+    ],
+    marketing: [
+      { id: 'm_strat', name: 'Strategy & Planning', icon: '🎯', items: [
+        { id: 'ms0', name: 'Marketing Strategy Document', unit: 'Fixed', low: 400, high: 700, note: 'Audience, goals, channels, 12-month roadmap' },
+        { id: 'ms1', name: 'Competitor Analysis Report', unit: 'Fixed', low: 250, high: 450, note: 'Full breakdown of competitors activity + gaps' },
+        { id: 'ms2', name: 'Brand Guidelines Update', unit: 'Fixed', low: 150, high: 300, note: 'Ensure consistency across all channels' },
+        { id: 'ms3', name: 'Monthly Marketing Strategy Meeting', unit: 'Per session', low: 100, high: 180, note: '60–90 mins – review results + plan next month' },
+        { id: 'ms4', name: 'Quarterly Strategy Review', unit: 'Per session', low: 250, high: 400, note: 'Deep dive, adjust direction, set new targets' },
+      ]},
+      { id: 'm_single', name: 'Platform Management – Single', icon: '📱', items: [
+        { id: 'mp0', name: 'YouTube Channel Management', unit: 'Per month', low: 300, high: 550, note: 'Uploads, SEO titles/tags, thumbnails, analytics' },
+        { id: 'mp1', name: 'Instagram Management', unit: 'Per month', low: 250, high: 450, note: 'Posts, Reels, Stories, engagement, hashtags' },
+        { id: 'mp2', name: 'Facebook Management', unit: 'Per month', low: 220, high: 400, note: 'Page posts, community management, reviews, events' },
+        { id: 'mp3', name: 'LinkedIn Management', unit: 'Per month', low: 280, high: 500, note: 'Professional content, outreach, company page growth' },
+        { id: 'mp4', name: 'TikTok Management', unit: 'Per month', low: 250, high: 450, note: 'Trend-based content, hashtags, engagement' },
+        { id: 'mp5', name: 'X (Twitter) Management', unit: 'Per month', low: 180, high: 320, note: 'Regular updates, industry news, engagement' },
+        { id: 'mp6', name: 'Google Business Profile Management', unit: 'Per month', low: 150, high: 280, note: 'Posts, reviews, updates, local optimisation' },
+      ]},
+      { id: 'm_multi', name: 'Platform Management – Multi', icon: '📱', items: [
+        { id: 'mm0', name: 'Dual Platform Management', unit: 'Per month', low: 450, high: 750, note: 'Any 2 channels from list above' },
+        { id: 'mm1', name: '3–4 Platform Management', unit: 'Per month', low: 700, high: 1100, note: 'Full cross-platform consistency & scheduling' },
+        { id: 'mm2', name: '5+ Platform Full Social Management', unit: 'Per month', low: 950, high: 1500, note: 'Every major channel + Google Business Profile' },
+      ]},
+      { id: 'm_video', name: 'Video Included Packages', icon: '📺', items: [
+        { id: 'mv0', name: 'YouTube Management + 1 Video / Month', unit: 'Per month', low: 650, high: 950, note: 'Includes: shoot, edit, upload, SEO, thumbnails' },
+        { id: 'mv1', name: 'Multi-Platform + 2 Videos / Month', unit: 'Per month', low: 900, high: 1400, note: '1 shoot day, edited into multiple formats' },
+        { id: 'mv2', name: 'Premium – Full Content Engine', unit: 'Per month', low: 1300, high: 1900, note: '1 full shoot day → 6–8 videos cut for all platforms + optimisation' },
+      ]},
+      { id: 'm_web', name: 'Website Management Add-On', icon: '🌐', items: [
+        { id: 'mw0', name: 'Standard Website Maintenance', unit: 'Per month', low: 150, high: 280, note: 'Updates, backups, security, small edits' },
+        { id: 'mw1', name: 'Website + Content Updates', unit: 'Per month', low: 250, high: 400, note: 'Regular text/image changes, new service pages' },
+        { id: 'mw2', name: 'Website + SEO Management', unit: 'Per month', low: 300, high: 500, note: 'On-page tweaks, keyword tracking, speed checks' },
+        { id: 'mw3', name: 'Full Web + Marketing Combo', unit: 'Per month', low: 450, high: 700, note: 'All website care + social posting + basic SEO' },
+      ]},
+      { id: 'm_seo', name: 'SEO & Growth', icon: '🔍', items: [
+        { id: 'mg0', name: 'Local SEO Management', unit: 'Per month', low: 200, high: 350, note: 'Map rankings, local keywords, citations' },
+        { id: 'mg1', name: 'Full SEO Management', unit: 'Per month', low: 350, high: 600, note: 'Technical, on-page, off-page, monthly reports' },
+        { id: 'mg2', name: 'Review Management', unit: 'Per month', low: 120, high: 220, note: 'Request + respond to reviews across all platforms' },
+        { id: 'mg3', name: 'Email Marketing Management', unit: 'Per month', low: 180, high: 320, note: 'Newsletters, automation, list growth' },
+        { id: 'mg4', name: 'Paid Ads Management (Google / Meta)', unit: 'Per month', low: 300, high: 600, note: '20% of spend OR flat fee – campaign setup, optimisation, reporting' },
+      ]},
+      { id: 'm_full', name: 'Complete Full-Service Management', icon: '🚀', items: [
+        { id: 'mf0', name: 'Level 1 – Starter', unit: 'Per month', low: 950, high: 1300, note: '2 social platforms, 1 short video/month, website maintenance, monthly meeting + report' },
+        { id: 'mf1', name: 'Level 2 – Growth', unit: 'Per month', low: 1400, high: 1900, note: '4 social platforms, 1 shoot day → 3–4 videos, website + SEO, monthly meeting + report' },
+        { id: 'mf2', name: 'Level 3 – Premium / Agency Level', unit: 'Per month', low: 2000, high: 2800, note: 'All major platforms, dedicated video session, full website management, SEO, email marketing, monthly strategy meeting + report' },
+      ]},
+      { id: 'm_report', name: 'Reporting & Analysis', icon: '📊', items: [
+        { id: 'mr0', name: 'Monthly Performance Report', unit: 'Per month', low: 80, high: 150, note: 'Growth, engagement, conversions, recommendations' },
+        { id: 'mr1', name: 'Quarterly Deep-Dive Report', unit: 'Per quarter', low: 200, high: 350, note: 'Trends, ROI, strategy adjustment' },
+        { id: 'mr2', name: 'Custom Analytics Dashboard Setup', unit: 'Fixed', low: 150, high: 250, note: 'Live view of all key metrics' },
+      ]},
+    ],
+  }
 };
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
-let priceMode = 'low'; // low | mid | high
-let selected = {}; // key: {tab, catIdx, itemIdx, qty}
-let currentTab = 'production';
+let DATA = loadData();
+let priceMode = 'low';
+let currentTab = DATA.tabs[0].id;
+let selected = {}; // key -> {tabId, catId, itemId, qty}
+let editMode = false;
+let pendingAddCatTab = null;
+let pendingAddSvcCat = null;
 
+function loadData() {
+  try {
+    const saved = localStorage.getItem('wdg_calc_data');
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
+
+function saveData() {
+  localStorage.setItem('wdg_calc_data', JSON.stringify(DATA));
+}
+
+function uid() {
+  return Math.random().toString(36).slice(2, 9);
+}
+
+// ─── EDIT MODE ───────────────────────────────────────────────────────────────
+function toggleEditMode() {
+  editMode = !editMode;
+  document.body.classList.toggle('edit-mode-on', editMode);
+  document.getElementById('editToggle').classList.toggle('active', editMode);
+  document.getElementById('editToggle').textContent = editMode ? '✅ Done' : '✏️ Edit';
+  renderAll();
+}
+
+// ─── TABS ────────────────────────────────────────────────────────────────────
+function renderTabs() {
+  const bar = document.getElementById('tabsBar');
+  bar.innerHTML = DATA.tabs.map(t => `
+    <div class="tab${t.id === currentTab ? ' active' : ''}" onclick="switchTab('${t.id}')">
+      ${t.icon} ${t.label}
+      <span class="tab-del" onclick="event.stopPropagation(); deleteTab('${t.id}')">✕</span>
+    </div>
+  `).join('');
+}
+
+function switchTab(id) {
+  currentTab = id;
+  renderAll();
+}
+
+function openAddTab() {
+  document.getElementById('newTabName').value = '';
+  document.getElementById('newTabIcon').value = '';
+  document.getElementById('addTabModal').classList.add('open');
+  setTimeout(() => document.getElementById('newTabName').focus(), 100);
+}
+function closeAddTab() { document.getElementById('addTabModal').classList.remove('open'); }
+function confirmAddTab() {
+  const name = document.getElementById('newTabName').value.trim();
+  const icon = document.getElementById('newTabIcon').value.trim() || '📋';
+  if (!name) return;
+  const id = 'tab_' + uid();
+  DATA.tabs.push({ id, label: name, icon });
+  DATA.cats[id] = [];
+  currentTab = id;
+  saveData();
+  closeAddTab();
+  renderAll();
+}
+
+function deleteTab(id) {
+  if (DATA.tabs.length <= 1) return alert('You need at least one tab.');
+  if (!confirm(`Delete the "${DATA.tabs.find(t=>t.id===id)?.label}" tab and all its services?`)) return;
+  DATA.tabs = DATA.tabs.filter(t => t.id !== id);
+  delete DATA.cats[id];
+  if (currentTab === id) currentTab = DATA.tabs[0].id;
+  // Clear any selected items from deleted tab
+  Object.keys(selected).forEach(k => { if (selected[k].tabId === id) delete selected[k]; });
+  saveData();
+  renderAll();
+}
+
+// ─── CATEGORIES ──────────────────────────────────────────────────────────────
+function openAddCat(tabId) {
+  pendingAddCatTab = tabId;
+  document.getElementById('newCatName').value = '';
+  document.getElementById('newCatIcon').value = '';
+  document.getElementById('addCatModal').classList.add('open');
+  setTimeout(() => document.getElementById('newCatName').focus(), 100);
+}
+function closeAddCat() { document.getElementById('addCatModal').classList.remove('open'); }
+function confirmAddCat() {
+  const name = document.getElementById('newCatName').value.trim();
+  const icon = document.getElementById('newCatIcon').value.trim() || '📋';
+  if (!name) return;
+  const id = 'cat_' + uid();
+  if (!DATA.cats[pendingAddCatTab]) DATA.cats[pendingAddCatTab] = [];
+  DATA.cats[pendingAddCatTab].push({ id, name, icon, items: [] });
+  saveData();
+  closeAddCat();
+  renderAll();
+}
+
+function deleteCat(tabId, catId) {
+  if (!confirm('Remove this section and all its services?')) return;
+  DATA.cats[tabId] = DATA.cats[tabId].filter(c => c.id !== catId);
+  Object.keys(selected).forEach(k => { if (selected[k].catId === catId) delete selected[k]; });
+  saveData();
+  renderAll();
+}
+
+function updateCatName(tabId, catId, val) {
+  const cat = DATA.cats[tabId]?.find(c => c.id === catId);
+  if (cat) { cat.name = val; saveData(); }
+}
+
+// ─── SERVICES ────────────────────────────────────────────────────────────────
+function openAddService(catId) {
+  pendingAddSvcCat = catId;
+  document.getElementById('newSvcName').value = '';
+  document.getElementById('newSvcUnit').value = '';
+  document.getElementById('newSvcLow').value = '';
+  document.getElementById('newSvcHigh').value = '';
+  document.getElementById('newSvcNote').value = '';
+  document.getElementById('addServiceModal').classList.add('open');
+  setTimeout(() => document.getElementById('newSvcName').focus(), 100);
+}
+function closeAddService() { document.getElementById('addServiceModal').classList.remove('open'); }
+function confirmAddService() {
+  const name = document.getElementById('newSvcName').value.trim();
+  const unit = document.getElementById('newSvcUnit').value.trim() || 'Fixed';
+  const low = parseFloat(document.getElementById('newSvcLow').value) || 0;
+  const high = parseFloat(document.getElementById('newSvcHigh').value) || low;
+  const note = document.getElementById('newSvcNote').value.trim();
+  if (!name) return;
+  const id = 'svc_' + uid();
+  // Find the cat across all tabs
+  for (const tabId of Object.keys(DATA.cats)) {
+    const cat = DATA.cats[tabId]?.find(c => c.id === pendingAddSvcCat);
+    if (cat) { cat.items.push({ id, name, unit, low, high, note }); break; }
+  }
+  saveData();
+  closeAddService();
+  renderAll();
+}
+
+function deleteService(catId, itemId) {
+  for (const tabId of Object.keys(DATA.cats)) {
+    const cat = DATA.cats[tabId]?.find(c => c.id === catId);
+    if (cat) {
+      cat.items = cat.items.filter(i => i.id !== itemId);
+      const key = `${catId}_${itemId}`;
+      delete selected[key];
+      break;
+    }
+  }
+  saveData();
+  renderAll();
+}
+
+function updateItemField(catId, itemId, field, val) {
+  for (const tabId of Object.keys(DATA.cats)) {
+    const cat = DATA.cats[tabId]?.find(c => c.id === catId);
+    if (cat) {
+      const item = cat.items.find(i => i.id === itemId);
+      if (item) {
+        if (field === 'low' || field === 'high') {
+          item[field] = parseFloat(val) || 0;
+        } else {
+          item[field] = val;
+        }
+        saveData();
+      }
+      break;
+    }
+  }
+}
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+function renderAll() {
+  renderTabs();
+  renderTabContents();
+  updateTotals();
+}
+
+function renderTabContents() {
+  const container = document.getElementById('tabContents');
+  container.innerHTML = '';
+
+  const cats = DATA.cats[currentTab] || [];
+
+  if (cats.length === 0 && !editMode) {
+    container.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--muted);font-size:0.8rem;">No services yet. Turn on Edit mode to add some.</div>`;
+  }
+
+  cats.forEach(cat => {
+    const section = document.createElement('div');
+    section.className = 'cat-section';
+
+    // Collapse state
+    const colKey = `col_${cat.id}`;
+    const isCollapsed = sessionStorage.getItem(colKey) === '1';
+
+    const headerHtml = `
+      <div class="cat-header${isCollapsed ? ' collapsed' : ''}" id="ch_${cat.id}" onclick="toggleCat('${cat.id}')">
+        <span class="cat-icon">${cat.icon}</span>
+        ${editMode
+          ? `<input class="cat-name-input" value="${escHtml(cat.name)}" onclick="event.stopPropagation()" onchange="updateCatName('${currentTab}','${cat.id}',this.value)" />`
+          : `<span class="cat-name">${escHtml(cat.name)}</span>`}
+        <span class="cat-edit-btns">
+          <button class="btn-sm btn-ghost" onclick="event.stopPropagation();openAddService('${cat.id}')">+ Service</button>
+          <button class="btn-sm btn-danger" onclick="event.stopPropagation();deleteCat('${currentTab}','${cat.id}')">🗑 Remove</button>
+        </span>
+        <span class="cat-chevron">▾</span>
+      </div>`;
+
+    let itemsHtml = cat.items.map(item => {
+      const key = `${cat.id}_${item.id}`;
+      const sel = selected[key];
+      const qty = sel ? sel.qty : 1;
+      const priceVal = getPrice(item);
+      const priceDisplay = item.low === item.high
+        ? `£${item.low.toLocaleString()}`
+        : priceMode === 'mid'
+          ? `~£${priceVal.toLocaleString()}`
+          : `£${item.low.toLocaleString()} – £${item.high.toLocaleString()}`;
+
+      return `<div class="item${sel ? ' selected' : ''}" id="item_${key}">
+        <div class="item-check${sel ? ' checked' : ''}" onclick="toggleItem('${cat.id}','${item.id}')"></div>
+        <div class="item-info">
+          <div class="item-name">${escHtml(item.name)}</div>
+          <div class="item-note">${escHtml(item.note)}</div>
+        </div>
+        <div class="item-edit-fields">
+          <div class="edit-field-row">
+            <div style="flex:2;min-width:140px">
+              <div class="ef-label">Service Name</div>
+              <input class="ef ef-name" value="${escHtml(item.name)}" onchange="updateItemField('${cat.id}','${item.id}','name',this.value)"/>
+            </div>
+            <div style="flex:1;min-width:90px">
+              <div class="ef-label">Unit</div>
+              <input class="ef ef-unit" value="${escHtml(item.unit)}" onchange="updateItemField('${cat.id}','${item.id}','unit',this.value)"/>
+            </div>
+            <div>
+              <div class="ef-label">Low £</div>
+              <input class="ef ef-low" type="number" value="${item.low}" onchange="updateItemField('${cat.id}','${item.id}','low',this.value)"/>
+            </div>
+            <div>
+              <div class="ef-label">High £</div>
+              <input class="ef ef-high" type="number" value="${item.high}" onchange="updateItemField('${cat.id}','${item.id}','high',this.value)"/>
+            </div>
+          </div>
+          <div class="edit-field-row">
+            <div style="flex:1;min-width:180px">
+              <div class="ef-label">Notes</div>
+              <input class="ef ef-note" value="${escHtml(item.note)}" onchange="updateItemField('${cat.id}','${item.id}','note',this.value)"/>
+            </div>
+          </div>
+        </div>
+        <span class="item-unit">${escHtml(item.unit)}</span>
+        <input class="item-qty" type="number" min="1" max="999" value="${qty}"
+          onchange="setQty('${cat.id}','${item.id}',this.value)"
+          style="display:${sel ? 'block' : 'none'}" id="qty_${key}"/>
+        <div class="item-price-display">${priceDisplay}</div>
+        <div class="item-del-btn">
+          <button class="btn-sm btn-danger" onclick="deleteService('${cat.id}','${item.id}')">✕</button>
+        </div>
+      </div>`;
+    }).join('');
+
+    const addServiceRow = `<div class="add-service-row">
+      <button class="btn-sm btn-ghost" onclick="openAddService('${cat.id}')">+ Add Service to this section</button>
+    </div>`;
+
+    const bodyHtml = `<div class="cat-body${isCollapsed ? ' hidden' : ''}" id="cb_${cat.id}">${itemsHtml}${addServiceRow}</div>`;
+
+    section.innerHTML = headerHtml + bodyHtml;
+    container.appendChild(section);
+  });
+
+  // Add Category button
+  const addCatRow = document.createElement('div');
+  addCatRow.className = 'add-cat-row';
+  addCatRow.innerHTML = `<button class="btn-sm btn-ghost" onclick="openAddCat('${currentTab}')">+ Add New Section</button>
+    <span style="font-size:0.65rem;color:var(--muted);">to ${DATA.tabs.find(t=>t.id===currentTab)?.label || 'this tab'}</span>`;
+  container.appendChild(addCatRow);
+
+  // Apply edit-mode class to body
+  if (editMode) {
+    document.body.classList.add('edit-mode');
+  } else {
+    document.body.classList.remove('edit-mode');
+  }
+}
+
+function toggleCat(catId) {
+  const header = document.getElementById(`ch_${catId}`);
+  const body = document.getElementById(`cb_${catId}`);
+  if (!header || !body) return;
+  const isCollapsed = header.classList.contains('collapsed');
+  header.classList.toggle('collapsed', !isCollapsed);
+  body.classList.toggle('hidden', !isCollapsed);
+  sessionStorage.setItem(`col_${catId}`, isCollapsed ? '0' : '1');
+}
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── ITEM SELECTION ──────────────────────────────────────────────────────────
 function getPrice(item) {
   if (priceMode === 'low') return item.low;
   if (priceMode === 'high') return item.high;
   return Math.round((item.low + item.high) / 2);
 }
 
-function itemKey(tab, catIdx, itemIdx) {
-  return `${tab}_${catIdx}_${itemIdx}`;
-}
-
-// ─── RENDER ──────────────────────────────────────────────────────────────────
-function renderTab(tab) {
-  const container = document.getElementById(`tab-${tab}`);
-  const cats = DATA[tab];
-  let html = '';
-  cats.forEach((cat, ci) => {
-    const hasSelected = cat.items.some((_, ii) => selected[itemKey(tab, ci, ii)]);
-    html += `<div class="cat-section">
-      <div class="cat-header${hasSelected ? ' open' : ''}" onclick="toggleCat(this)">
-        <span class="cat-icon">${cat.cat.split(' ')[0]}</span>
-        <span class="cat-name">${cat.cat.replace(/^\S+\s/, '')}</span>
-        <span class="cat-chevron">▾</span>
-      </div>
-      <div class="cat-body${hasSelected ? ' open' : ''}">`;
-    cat.items.forEach((item, ii) => {
-      const key = itemKey(tab, ci, ii);
-      const sel = selected[key];
-      const qty = sel ? sel.qty : 1;
-      const price = getPrice(item);
-      const priceDisplay = priceMode === 'mid'
-        ? `~£${price.toLocaleString()}`
-        : `£${item.low.toLocaleString()} – £${item.high.toLocaleString()}`;
-      html += `<div class="item${sel ? ' selected' : ''}" id="item-${key}">
-        <div class="item-check${sel ? ' checked' : ''}" onclick="toggleItem('${tab}',${ci},${ii})"></div>
-        <div class="item-info">
-          <div class="item-name">${item.name}</div>
-          <div class="item-note">${item.note}</div>
-        </div>
-        <span class="item-unit">${item.unit}</span>
-        <input class="item-qty" type="number" min="1" max="99" value="${qty}"
-          onchange="setQty('${tab}',${ci},${ii},this.value)"
-          onclick="if(!selected['${key}'])toggleItem('${tab}',${ci},${ii})"
-          style="display:${sel ? 'block' : 'none'}" id="qty-${key}"/>
-        <div class="item-price">
-          <div class="item-price-range">${priceMode === 'mid' ? `~£${price.toLocaleString()}` : `£${item.low.toLocaleString()} – £${item.high.toLocaleString()}`}</div>
-        </div>
-      </div>`;
-    });
-    html += `</div></div>`;
-  });
-  container.innerHTML = html;
-}
-
-function renderAll() {
-  ['production','web','marketing'].forEach(renderTab);
-  updateTotals();
-}
-
-function toggleCat(header) {
-  header.classList.toggle('open');
-  header.nextElementSibling.classList.toggle('open');
-}
-
-function toggleItem(tab, ci, ii) {
-  const key = itemKey(tab, ci, ii);
+function toggleItem(catId, itemId) {
+  if (editMode) return;
+  const key = `${catId}_${itemId}`;
   if (selected[key]) {
     delete selected[key];
   } else {
-    selected[key] = { tab, catIdx: ci, itemIdx: ii, qty: 1 };
+    selected[key] = { catId, itemId, qty: 1 };
   }
-  const item = document.getElementById(`item-${key}`);
-  const check = item.querySelector('.item-check');
-  const qtyInput = document.getElementById(`qty-${key}`);
+  const itemEl = document.getElementById(`item_${key}`);
+  const checkEl = itemEl?.querySelector('.item-check');
+  const qtyEl = document.getElementById(`qty_${key}`);
   if (selected[key]) {
-    item.classList.add('selected');
-    check.classList.add('checked');
-    qtyInput.style.display = 'block';
+    itemEl?.classList.add('selected');
+    checkEl?.classList.add('checked');
+    if (qtyEl) qtyEl.style.display = 'block';
   } else {
-    item.classList.remove('selected');
-    check.classList.remove('checked');
-    qtyInput.style.display = 'none';
+    itemEl?.classList.remove('selected');
+    checkEl?.classList.remove('checked');
+    if (qtyEl) qtyEl.style.display = 'none';
   }
   updateTotals();
 }
 
-function setQty(tab, ci, ii, val) {
-  const key = itemKey(tab, ci, ii);
+function setQty(catId, itemId, val) {
+  const key = `${catId}_${itemId}`;
   const qty = Math.max(1, parseInt(val) || 1);
   if (selected[key]) selected[key].qty = qty;
-  document.getElementById(`qty-${key}`).value = qty;
+  const el = document.getElementById(`qty_${key}`);
+  if (el) el.value = qty;
   updateTotals();
 }
 
 function updateTotals() {
   let lowTotal = 0, highTotal = 0, count = 0;
   Object.values(selected).forEach(s => {
-    const item = DATA[s.tab][s.catIdx].items[s.itemIdx];
+    const item = findItem(s.catId, s.itemId);
+    if (!item) return;
     lowTotal += item.low * s.qty;
     highTotal += item.high * s.qty;
     count++;
   });
-  const midTotal = Math.round((lowTotal + highTotal) / 2);
-  const displayTotal = priceMode === 'low' ? lowTotal : priceMode === 'high' ? highTotal : midTotal;
-
+  const displayTotal = priceMode === 'low' ? lowTotal : priceMode === 'high' ? highTotal : Math.round((lowTotal+highTotal)/2);
   document.getElementById('headerTotal').textContent = `£${displayTotal.toLocaleString()}`;
   document.getElementById('quoteTotal').textContent = `£${displayTotal.toLocaleString()}`;
   document.getElementById('quoteCount').textContent = `${count} item${count !== 1 ? 's' : ''} selected`;
-  if (count > 0 && priceMode !== 'mid') {
-    document.getElementById('quoteRange').textContent = `Range: £${lowTotal.toLocaleString()} – £${highTotal.toLocaleString()}`;
-  } else {
-    document.getElementById('quoteRange').textContent = '';
-  }
+  document.getElementById('quoteRange').textContent = (count > 0 && priceMode !== 'mid' && lowTotal !== highTotal)
+    ? `Range: £${lowTotal.toLocaleString()} – £${highTotal.toLocaleString()}` : '';
 }
 
-function switchTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  event.target.classList.add('active');
-  ['production','web','marketing'].forEach(t => {
-    document.getElementById(`tab-${t}`).style.display = t === tab ? 'block' : 'none';
-  });
+function findItem(catId, itemId) {
+  for (const tabId of Object.keys(DATA.cats)) {
+    const cat = DATA.cats[tabId]?.find(c => c.id === catId);
+    if (cat) return cat.items.find(i => i.id === itemId) || null;
+  }
+  return null;
+}
+
+function findCatTabLabel(catId) {
+  for (const tab of DATA.tabs) {
+    if (DATA.cats[tab.id]?.find(c => c.id === catId)) return `${tab.icon} ${tab.label}`;
+  }
+  return '';
 }
 
 function setPriceMode(mode) {
@@ -491,109 +840,105 @@ function clearAll() {
   renderAll();
 }
 
-// ─── MODAL ───────────────────────────────────────────────────────────────────
+// ─── QUOTE MODAL ─────────────────────────────────────────────────────────────
 function openModal() {
-  const keys = Object.keys(selected);
-  if (keys.length === 0) {
-    alert('Please select at least one item first.');
-    return;
-  }
+  if (!Object.keys(selected).length) { alert('Please select at least one item first.'); return; }
 
   let lowTotal = 0, highTotal = 0;
-  let rows = '';
-  let lastTab = null;
-
   // Group by tab
-  const byTab = { production: [], web: [], marketing: [] };
-  keys.forEach(k => {
-    const s = selected[k];
-    byTab[s.tab].push(s);
+  const byTab = {};
+  DATA.tabs.forEach(t => byTab[t.id] = []);
+
+  Object.values(selected).forEach(s => {
+    const item = findItem(s.catId, s.itemId);
+    if (!item) return;
+    for (const tab of DATA.tabs) {
+      if (DATA.cats[tab.id]?.find(c => c.id === s.catId)) {
+        byTab[tab.id].push({ s, item });
+        break;
+      }
+    }
   });
 
-  ['production','web','marketing'].forEach(tab => {
-    if (!byTab[tab].length) return;
-    const tabNames = { production: '🎥 Production', web: '🖥️ Web Design', marketing: '📱 Marketing' };
-    rows += `<tr><td colspan="4" style="padding: 12px 8px 4px; font-size:0.62rem; letter-spacing:0.15em; text-transform:uppercase; color: var(--gold); font-weight:700;">${tabNames[tab]}</td></tr>`;
-    byTab[tab].forEach(s => {
-      const item = DATA[s.tab][s.catIdx].items[s.itemIdx];
-      const lowLine = item.low * s.qty;
-      const highLine = item.high * s.qty;
-      lowTotal += lowLine;
-      highTotal += highLine;
-      const priceStr = priceMode === 'mid'
-        ? `~£${Math.round((lowLine+highLine)/2).toLocaleString()}`
-        : `£${lowLine.toLocaleString()} – £${highLine.toLocaleString()}`;
+  let rows = '';
+  DATA.tabs.forEach(tab => {
+    const items = byTab[tab.id];
+    if (!items.length) return;
+    rows += `<tr><td colspan="4" style="padding:12px 8px 4px;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);font-weight:700;">${tab.icon} ${tab.label}</td></tr>`;
+    items.forEach(({ s, item }) => {
+      const low = item.low * s.qty, high = item.high * s.qty;
+      lowTotal += low; highTotal += high;
+      const priceStr = item.low === item.high
+        ? `£${(item.low * s.qty).toLocaleString()}`
+        : priceMode === 'mid'
+          ? `~£${Math.round((low+high)/2).toLocaleString()}`
+          : `£${low.toLocaleString()} – £${high.toLocaleString()}`;
       rows += `<tr>
         <td>${item.name}</td>
-        <td style="color:var(--muted); white-space:nowrap;">${item.unit}</td>
-        <td style="text-align:center; color:var(--muted);">${s.qty}</td>
+        <td style="color:var(--muted);white-space:nowrap;">${item.unit}</td>
+        <td style="text-align:center;color:var(--muted);">${s.qty}</td>
         <td class="td-price">${priceStr}</td>
       </tr>`;
     });
   });
 
-  const midTotal = Math.round((lowTotal + highTotal) / 2);
-
-  const totalsHtml = priceMode === 'mid' ? `
-    <div class="quote-totals-row"><span>Estimated Total</span><span>~£${midTotal.toLocaleString()}</span></div>
-  ` : `
-    <div class="quote-totals-row"><span>Low Estimate</span><span>£${lowTotal.toLocaleString()}</span></div>
-    <div class="quote-totals-row"><span>High Estimate</span><span>£${highTotal.toLocaleString()}</span></div>
-    <div class="quote-totals-row"><span>Total Range</span><span>£${lowTotal.toLocaleString()} – £${highTotal.toLocaleString()}</span></div>
-  `;
+  const mid = Math.round((lowTotal+highTotal)/2);
+  const totalsHtml = lowTotal === highTotal
+    ? `<div class="quote-totals-row"><span>Total</span><span>£${lowTotal.toLocaleString()}</span></div>`
+    : priceMode === 'mid'
+      ? `<div class="quote-totals-row"><span>Estimated Total</span><span>~£${mid.toLocaleString()}</span></div>`
+      : `<div class="quote-totals-row"><span>Low Estimate</span><span>£${lowTotal.toLocaleString()}</span></div>
+         <div class="quote-totals-row"><span>High Estimate</span><span>£${highTotal.toLocaleString()}</span></div>
+         <div class="quote-totals-row"><span>Total Range</span><span>£${lowTotal.toLocaleString()} – £${highTotal.toLocaleString()}</span></div>`;
 
   document.getElementById('modalContent').innerHTML = `
     <table class="quote-table">
       <thead><tr><th>Service</th><th>Unit</th><th style="text-align:center">Qty</th><th style="text-align:right">Price</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>
-    <div class="quote-totals">${totalsHtml}</div>
-  `;
+    <div class="quote-totals">${totalsHtml}</div>`;
 
   document.getElementById('modalOverlay').classList.add('open');
 }
 
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-}
-
-function closeModalOutside(e) {
-  if (e.target === document.getElementById('modalOverlay')) closeModal();
-}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
 
 function copyQuote() {
   const client = document.getElementById('clientName').value;
   const notes = document.getElementById('clientNotes').value;
-  let text = `WDG VIDEOGRAPHY — QUOTE SUMMARY\n`;
-  text += `${'─'.repeat(40)}\n`;
+  let text = `WDG VIDEOGRAPHY — QUOTE SUMMARY\n${'─'.repeat(40)}\n`;
   if (client) text += `Client: ${client}\n`;
   if (notes) text += `Notes: ${notes}\n`;
-  text += `Date: ${new Date().toLocaleDateString('en-GB')}\n`;
-  text += `Price mode: ${priceMode.charAt(0).toUpperCase() + priceMode.slice(1)} estimate\n\n`;
+  text += `Date: ${new Date().toLocaleDateString('en-GB')}\nPrice mode: ${priceMode.charAt(0).toUpperCase()+priceMode.slice(1)} estimate\n\n`;
 
   let lowTotal = 0, highTotal = 0;
-  const byTab = { production: [], web: [], marketing: [] };
-  Object.values(selected).forEach(s => byTab[s.tab].push(s));
-  const tabNames = { production: 'PRODUCTION', web: 'WEB DESIGN', marketing: 'MARKETING' };
-
-  ['production','web','marketing'].forEach(tab => {
-    if (!byTab[tab].length) return;
-    text += `${tabNames[tab]}\n`;
-    byTab[tab].forEach(s => {
-      const item = DATA[s.tab][s.catIdx].items[s.itemIdx];
-      const low = item.low * s.qty;
-      const high = item.high * s.qty;
+  DATA.tabs.forEach(tab => {
+    const items = [];
+    Object.values(selected).forEach(s => {
+      const item = findItem(s.catId, s.itemId);
+      if (!item) return;
+      if (DATA.cats[tab.id]?.find(c => c.id === s.catId)) items.push({ s, item });
+    });
+    if (!items.length) return;
+    text += `${tab.label.toUpperCase()}\n`;
+    items.forEach(({ s, item }) => {
+      const low = item.low * s.qty, high = item.high * s.qty;
       lowTotal += low; highTotal += high;
-      const priceStr = priceMode === 'mid'
-        ? `~£${Math.round((low+high)/2).toLocaleString()}`
-        : `£${low.toLocaleString()} – £${high.toLocaleString()}`;
-      text += `  • ${item.name}${s.qty > 1 ? ` (×${s.qty})` : ''} — ${priceStr}\n`;
+      const p = item.low === item.high
+        ? `£${(item.low * s.qty).toLocaleString()}`
+        : priceMode === 'mid'
+          ? `~£${Math.round((low+high)/2).toLocaleString()}`
+          : `£${low.toLocaleString()} – £${high.toLocaleString()}`;
+      text += `  • ${item.name}${s.qty > 1 ? ` (×${s.qty})` : ''} — ${p}\n`;
     });
     text += '\n';
   });
 
   text += `${'─'.repeat(40)}\n`;
-  if (priceMode === 'mid') {
+  if (lowTotal === highTotal) {
+    text += `TOTAL: £${lowTotal.toLocaleString()}\n`;
+  } else if (priceMode === 'mid') {
     text += `TOTAL (mid estimate): ~£${Math.round((lowTotal+highTotal)/2).toLocaleString()}\n`;
   } else {
     text += `TOTAL RANGE: £${lowTotal.toLocaleString()} – £${highTotal.toLocaleString()}\n`;
@@ -607,7 +952,7 @@ function copyQuote() {
   });
 }
 
-// ─── INIT ────────────────────────────────────────────────────────────────────
+// ─── INIT ─────────────────────────────────────────────────────────────────────
 renderAll();
 </script>
 </body>
