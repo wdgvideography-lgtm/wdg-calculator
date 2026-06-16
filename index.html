@@ -300,7 +300,7 @@ const DEFAULT_DATA = {
     { id: 'production', label: 'Production', icon: '🎥' },
     { id: 'web', label: 'Web Design', icon: '🖥️' },
     { id: 'marketing', label: 'Marketing', icon: '📱' },
-    { id: 'dronemapping', label: 'Drone Mapping', icon: '🛸' },
+
   ],
   cats: {
     production: [
@@ -443,35 +443,6 @@ const DEFAULT_DATA = {
         { id: 'mr0', name: 'Monthly Performance Report', unit: 'Per month', low: 80, high: 150, note: 'Growth, engagement, conversions, recommendations' },
         { id: 'mr1', name: 'Quarterly Deep-Dive Report', unit: 'Per quarter', low: 200, high: 350, note: 'Trends, ROI, strategy adjustment' },
         { id: 'mr2', name: 'Custom Analytics Dashboard Setup', unit: 'Fixed', low: 150, high: 250, note: 'Live view of all key metrics' },
-      ]},
-    ],
-    dronemapping: [
-      { id: 'dm_field', name: 'Field & Agricultural Mapping', icon: '🌾', items: [
-        { id: 'dm0', name: 'Orthomosaic Map – Small Field (up to 10 acres)', unit: 'Per survey', low: 250, high: 350, note: 'Stitched 2D aerial map, high-res imagery, digital download' },
-        { id: 'dm1', name: 'Orthomosaic Map – Medium Field (10–50 acres)', unit: 'Per survey', low: 350, high: 550, note: 'Full area coverage, 80% overlap, processed map delivered' },
-        { id: 'dm2', name: 'Orthomosaic Map – Large Field (50–150 acres)', unit: 'Per survey', low: 550, high: 900, note: 'Multi-battery mission, full grid coverage, processed output' },
-        { id: 'dm3', name: 'Orthomosaic Map – Per Acre Rate', unit: 'Per acre', low: 12, high: 20, note: 'For large or irregular sites — competitive UK market rate' },
-        { id: 'dm4', name: 'Minimum Call-Out Fee', unit: 'Fixed', low: 175, high: 200, note: 'Covers travel, setup and flight time on any small job' },
-      ]},
-      { id: 'dm_3d', name: '3D Modelling & Point Clouds', icon: '📐', items: [
-        { id: 'dm5', name: '3D Terrain Model – Small Site', unit: 'Per project', low: 350, high: 550, note: 'Photogrammetry-based, ideal for volume calculations and planning' },
-        { id: 'dm6', name: '3D Terrain Model – Large Site', unit: 'Per project', low: 600, high: 1200, note: 'Multi-pass flight, full point cloud, DEM output' },
-        { id: 'dm7', name: 'Digital Elevation Model (DEM)', unit: 'Per project', low: 200, high: 400, note: 'Height data layer for GIS or planning applications' },
-        { id: 'dm8', name: 'Contour Map Generation', unit: 'Per project', low: 150, high: 300, note: 'Extracted from point cloud, .shp or PDF output' },
-      ]},
-      { id: 'dm_inspect', name: 'Inspection & Monitoring', icon: '🔍', items: [
-        { id: 'dm9', name: 'Roof / Structure Inspection', unit: 'Per inspection', low: 175, high: 350, note: 'High-res photos, annotated PDF report, no scaffolding needed' },
-        { id: 'dm10', name: 'Construction Progress Survey', unit: 'Per visit', low: 300, high: 600, note: 'Before/after comparison, site overview imagery, timeline tracking' },
-        { id: 'dm11', name: 'Site Monitoring – Monthly Retainer', unit: 'Per month', low: 350, high: 700, note: 'Regular flyovers, change detection, progress reporting' },
-        { id: 'dm12', name: 'Thermal Imaging Survey', unit: 'Per survey', low: 350, high: 700, note: 'Heat loss, moisture, insulation mapping — add-on sensor required' },
-      ]},
-      { id: 'dm_delivery', name: 'Deliverables & Add-Ons', icon: '📦', items: [
-        { id: 'dm13', name: 'Processed Map Delivery (GeoTIFF / KMZ)', unit: 'Per project', low: 50, high: 100, note: 'Georeferenced output compatible with GIS, Google Earth, etc.' },
-        { id: 'dm14', name: 'PDF Report with Annotations', unit: 'Per project', low: 60, high: 120, note: 'Clearly labelled findings, measurements, overview imagery' },
-        { id: 'dm15', name: 'Raw Image Set Delivery', unit: 'Per project', low: 30, high: 60, note: 'All captured photos, full resolution, via download link' },
-        { id: 'dm16', name: 'CAA Airspace Permission (if required)', unit: 'Fixed', low: 50, high: 150, note: 'Required near airports or restricted zones — passed on at cost' },
-        { id: 'dm17', name: 'Rush Turnaround (24–48hr delivery)', unit: 'Fixed', low: 75, high: 150, note: 'Priority processing and delivery — 25–50% surcharge' },
-        { id: 'dm18', name: 'Additional Flight Pass (same site)', unit: 'Per pass', low: 80, high: 150, note: 'Second direction, oblique pass, or re-fly for missed areas' },
       ]},
     ],
   }
@@ -827,48 +798,13 @@ function setQty(catId, itemId, val) {
 
 function updateTotals() {
   let lowTotal = 0, highTotal = 0, count = 0;
-
-  // Calculate acre-rate subtotal (dm3) and minimum fee (dm4) separately
-  let acreRateLow = 0, acreRateHigh = 0;
-  let minFeeLow = 0, minFeeHigh = 0;
-  let hasMinFee = false;
-
   Object.values(selected).forEach(s => {
     const item = findItem(s.catId, s.itemId);
     if (!item) return;
-    if (item.id === 'dm3') {
-      acreRateLow += item.low * s.qty;
-      acreRateHigh += item.high * s.qty;
-    } else if (item.id === 'dm4') {
-      minFeeLow = item.low * s.qty;
-      minFeeHigh = item.high * s.qty;
-      hasMinFee = true;
-    } else {
-      lowTotal += item.low * s.qty;
-      highTotal += item.high * s.qty;
-    }
+    lowTotal += item.low * s.qty;
+    highTotal += item.high * s.qty;
     count++;
   });
-
-  // Apply minimum fee logic:
-  // The minimum call-out fee acts as a FLOOR for the acre rate.
-  // - If acre rate > minimum: use acre rate only (minimum is waived/reset to 0)
-  // - If acre rate <= minimum (or no acre rate): use the minimum fee
-  // - If no minimum fee selected: just use acre rate as-is
-  if (hasMinFee && acreRateLow > 0) {
-    // Both selected — use whichever is higher per price band
-    lowTotal += Math.max(acreRateLow, minFeeLow);
-    highTotal += Math.max(acreRateHigh, minFeeHigh);
-  } else if (hasMinFee) {
-    // Only minimum fee selected (no acre rate)
-    lowTotal += minFeeLow;
-    highTotal += minFeeHigh;
-  } else {
-    // Only acre rate selected (no minimum fee)
-    lowTotal += acreRateLow;
-    highTotal += acreRateHigh;
-  }
-
   const displayTotal = priceMode === 'low' ? lowTotal : priceMode === 'high' ? highTotal : Math.round((lowTotal+highTotal)/2);
   document.getElementById('headerTotal').textContent = `£${displayTotal.toLocaleString()}`;
   document.getElementById('quoteTotal').textContent = `£${displayTotal.toLocaleString()}`;
