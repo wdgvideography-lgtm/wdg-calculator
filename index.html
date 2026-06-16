@@ -851,19 +851,20 @@ function updateTotals() {
   });
 
   // Apply minimum fee logic:
-  // If acre rate is selected AND exceeds the minimum fee, drop the minimum fee
-  // Otherwise add whichever is higher (minimum fee applies as a floor)
+  // The minimum call-out fee acts as a FLOOR for the acre rate.
+  // - If acre rate > minimum: use acre rate only (minimum is waived/reset to 0)
+  // - If acre rate <= minimum (or no acre rate): use the minimum fee
+  // - If no minimum fee selected: just use acre rate as-is
   if (hasMinFee && acreRateLow > 0) {
-    // Acre rate exceeds minimum — just use acre rate, minimum is waived
-    lowTotal += acreRateLow;
-    highTotal += acreRateHigh;
-    // Don't add minFee — it's been superseded
+    // Both selected — use whichever is higher per price band
+    lowTotal += Math.max(acreRateLow, minFeeLow);
+    highTotal += Math.max(acreRateHigh, minFeeHigh);
   } else if (hasMinFee) {
-    // No acre rate selected — apply minimum fee normally
+    // Only minimum fee selected (no acre rate)
     lowTotal += minFeeLow;
     highTotal += minFeeHigh;
   } else {
-    // Acre rate selected without minimum fee
+    // Only acre rate selected (no minimum fee)
     lowTotal += acreRateLow;
     highTotal += acreRateHigh;
   }
