@@ -2,4 +2,4 @@
 WDG Videography internal pricing calculator
 
 Live: https://wdg-calculator.vercel.app
-Deployed on Vercel from this repo (main branch), auto-builds on push.
+Vercel project: wdg-calculator (GitHub-connected, auto-builds on push to main).
