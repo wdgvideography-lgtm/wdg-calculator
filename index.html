@@ -233,7 +233,7 @@
       <input type="text" id="clientNotes" placeholder="Notes / project brief (optional)"/>
     </div>
     <div id="modalContent"></div>
-    <div class="modal-note">All prices shown are indicative estimates based on WDG standard rates. Final quote subject to scope confirmation. Prices exclude VAT unless otherwise agreed.</div>
+    <div class="modal-note">All prices shown are indicative estimates based on WDG standard rates. Final quote subject to scope confirmation. No VAT to add: WDG Videography is not VAT registered.</div>
     <div class="modal-actions">
       <button class="btn-copy" onclick="copyQuote()">📋 Copy to Clipboard</button>
       <button class="btn-close-modal btn-gold" onclick="closeModal()">Close</button>
@@ -487,7 +487,7 @@ function renderTabs() {
   const bar = document.getElementById('tabsBar');
   bar.innerHTML = DATA.tabs.map(t => `
     <div class="tab${t.id === currentTab ? ' active' : ''}" onclick="switchTab('${t.id}')">
-      ${t.icon} ${t.label}
+      ${escHtml(t.icon)} ${escHtml(t.label)}
       <span class="tab-del" onclick="event.stopPropagation(); deleteTab('${t.id}')">✕</span>
     </div>
   `).join('');
@@ -653,7 +653,7 @@ function renderTabContents() {
 
     const headerHtml = `
       <div class="cat-header${isCollapsed ? ' collapsed' : ''}" id="ch_${cat.id}" onclick="toggleCat('${cat.id}')">
-        <span class="cat-icon">${cat.icon}</span>
+        <span class="cat-icon">${escHtml(cat.icon)}</span>
         ${editMode
           ? `<input class="cat-name-input" value="${escHtml(cat.name)}" onclick="event.stopPropagation()" onchange="updateCatName('${currentTab}','${cat.id}',this.value)" />`
           : `<span class="cat-name">${escHtml(cat.name)}</span>`}
@@ -732,7 +732,7 @@ function renderTabContents() {
   const addCatRow = document.createElement('div');
   addCatRow.className = 'add-cat-row';
   addCatRow.innerHTML = `<button class="btn-sm btn-ghost" onclick="openAddCat('${currentTab}')">+ Add New Section</button>
-    <span style="font-size:0.65rem;color:var(--muted);">to ${DATA.tabs.find(t=>t.id===currentTab)?.label || 'this tab'}</span>`;
+    <span style="font-size:0.65rem;color:var(--muted);">to ${escHtml(DATA.tabs.find(t=>t.id===currentTab)?.label || 'this tab')}</span>`;
   container.appendChild(addCatRow);
 
   // Apply edit-mode class to body
@@ -865,7 +865,7 @@ function openModal() {
   DATA.tabs.forEach(tab => {
     const items = byTab[tab.id];
     if (!items.length) return;
-    rows += `<tr><td colspan="4" style="padding:12px 8px 4px;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);font-weight:700;">${tab.icon} ${tab.label}</td></tr>`;
+    rows += `<tr><td colspan="4" style="padding:12px 8px 4px;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);font-weight:700;">${escHtml(tab.icon)} ${escHtml(tab.label)}</td></tr>`;
     items.forEach(({ s, item }) => {
       const low = item.low * s.qty, high = item.high * s.qty;
       lowTotal += low; highTotal += high;
@@ -875,8 +875,8 @@ function openModal() {
           ? `~£${Math.round((low+high)/2).toLocaleString()}`
           : `£${low.toLocaleString()} – £${high.toLocaleString()}`;
       rows += `<tr>
-        <td>${item.name}</td>
-        <td style="color:var(--muted);white-space:nowrap;">${item.unit}</td>
+        <td>${escHtml(item.name)}</td>
+        <td style="color:var(--muted);white-space:nowrap;">${escHtml(item.unit)}</td>
         <td style="text-align:center;color:var(--muted);">${s.qty}</td>
         <td class="td-price">${priceStr}</td>
       </tr>`;
@@ -944,7 +944,7 @@ function copyQuote() {
   } else {
     text += `TOTAL RANGE: £${lowTotal.toLocaleString()} – £${highTotal.toLocaleString()}\n`;
   }
-  text += `\nAll prices exclude VAT. Final quote subject to scope confirmation.\nWDG Videography — wdg.videography@gmail.com — 07584 065559`;
+  text += `\nNo VAT to add. Final quote subject to scope confirmation.\nWDG Videography — wdg.videography@gmail.com — 07584 065559`;
 
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.querySelector('.btn-copy');
