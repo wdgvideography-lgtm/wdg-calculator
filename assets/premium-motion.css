@@ -1,0 +1,33 @@
+/* Premium motion layer (WDG). Tokens + page transitions + hero lines + press feedback + reveals.
+   Works alongside each site's own CSS; everything respects prefers-reduced-motion. */
+:root{
+  --pm-ease-out:cubic-bezier(0.23,1,0.32,1);
+  --pm-ease-in-out:cubic-bezier(0.77,0,0.175,1);
+  --pm-rise:18px;
+}
+@media (prefers-reduced-motion:reduce){:root{--pm-rise:0px}}
+
+/* Page-to-page: native cross-document view transitions (Chrome/Edge/Safari; others load normally) */
+@view-transition{navigation:auto}
+@media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}
+::view-transition-old(root){animation:280ms var(--pm-ease-out) both pm-vt-out}
+::view-transition-new(root){animation:380ms var(--pm-ease-out) both pm-vt-in}
+@keyframes pm-vt-out{to{opacity:0}}
+@keyframes pm-vt-in{from{opacity:0;translate:0 10px}}
+
+/* Press feedback: individual `scale` property so it never fights a component's own transform */
+.pm-press:active:not(:disabled){scale:.97}
+
+/* Hero headline: each line rises out of its own mask */
+.pm-js [data-pm-lines]:not(.pm-ready){visibility:hidden;animation:pm-failsafe 0s 1.5s forwards}
+@keyframes pm-failsafe{to{visibility:visible}}
+.pm-line{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
+.pm-line>span{display:block;animation:pm-line-up 950ms var(--pm-ease-out) both;animation-delay:calc(var(--pm-i)*110ms + 120ms)}
+@keyframes pm-line-up{from{translate:0 105%}}
+@media (prefers-reduced-motion:reduce){.pm-line>span{animation:pm-fade 400ms ease both}}
+@keyframes pm-fade{from{opacity:0}}
+
+/* Generic reveal (for elements the site doesn't already reveal) */
+.pm-js [data-pm-reveal]{opacity:0;translate:0 var(--pm-rise);transition:opacity .8s var(--pm-ease-out),translate .8s var(--pm-ease-out);transition-delay:calc(var(--pm-i,0)*70ms)}
+.pm-js [data-pm-reveal].pm-in{opacity:1;translate:none}
+@media (prefers-reduced-motion:reduce){.pm-js [data-pm-reveal]{transition-duration:.3s;transition-delay:0s}}
